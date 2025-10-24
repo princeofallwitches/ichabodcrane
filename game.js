@@ -35,6 +35,7 @@ class Game {
 
         this.render();
         this.log("You enter the decrepit mansion. The door creaks shut behind you...");
+        this.log("Remember this entrance - it may be your only escape...");
         this.log("Explore the house by clicking on adjacent rooms.");
     }
 
@@ -453,14 +454,13 @@ class Game {
     checkExit() {
         const currentRoom = this.getRoom(this.player.position.x, this.player.position.y);
 
-        if (currentRoom.type === 'exit') {
+        if (currentRoom && currentRoom.type === 'exit') {
             if (this.horseman) {
+                // Player reached the exit while horseman is hunting - they win!
                 this.winGame('exit');
-            } else {
-                this.showModal('The Exit',
-                    'You could leave now... but something tells you that you haven\'t yet faced the true horror of this place.',
-                    [{ text: 'Continue Exploring', action: () => this.closeModal() }]);
             }
+            // If horseman hasn't appeared, the exit is just a normal walkable room
+            // No modal shown - player can freely move through it
         }
     }
 
