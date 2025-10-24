@@ -259,7 +259,20 @@ h2, h3 {
     animation: pulse 1s infinite;
 }
 
-.room:hover:not(.unexplored) {
+.room.out-of-range {
+    opacity: 0.4;
+    filter: grayscale(0.6);
+}
+
+.room.in-range {
+    opacity: 1;
+}
+
+.room.in-range:hover {
+    border-color: #4ade80;
+}
+
+.room:hover:not(.unexplored):not(.out-of-range) {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.6);
 }

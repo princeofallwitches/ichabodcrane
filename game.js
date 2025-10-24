@@ -18,6 +18,7 @@ class Game {
         this.gameOver = false;
         this.hasMovedThisTurn = false;
         this.startPosition = { x: 5, y: 5 };
+        this.turnStartPosition = { x: 5, y: 5 }; // Track where the current turn started
 
         this.initializeGame();
         this.setupEventListeners();
@@ -111,16 +112,28 @@ class Game {
         if (this.gameOver) return;
 
         const targetRoom = this.getRoom(x, y);
+        const adjacent = this.getAdjacentRooms();
+        const isAdjacent = adjacent.some(pos => pos.x === x && pos.y === y);
 
         // Moving to an explored room
         if (targetRoom && targetRoom.explored) {
+            // Check if room is within movement range
+            if (!this.isRoomReachable(x, y)) {
+                this.log("Too far! You don't have enough strength to reach that room.", 'event');
+                return;
+            }
+
             this.player.position = { x, y };
             this.hasMovedThisTurn = true;
             this.render();
             return;
         }
 
-        // Exploring a new room (ends turn)
+        // Exploring a new room (must be adjacent and ends turn)
+        if (!isAdjacent) {
+            return; // Can only explore adjacent rooms
+        }
+
         if (!targetRoom) {
             this.generateRandomRoom(x, y);
         }
@@ -426,6 +439,9 @@ class Game {
         this.turn++;
         this.hasMovedThisTurn = false;
 
+        // Reset turn start position to current position for next turn
+        this.turnStartPosition = { x: this.player.position.x, y: this.player.position.y };
+
         // Move horseman
         if (this.horseman) {
             this.moveHorseman();
@@ -483,6 +499,57 @@ class Game {
         return adjacent;
     }
 
+    getReachableRooms() {
+        // Calculate which rooms are within movement range (based on health)
+        const movementRange = this.player.health;
+        const reachable = new Map();
+
+        // BFS to find all rooms within movement range from turn start position
+        const queue = [{ pos: this.turnStartPosition, distance: 0 }];
+        reachable.set(this.getRoomKey(this.turnStartPosition.x, this.turnStartPosition.y), 0);
+
+        while (queue.length > 0) {
+            const { pos, distance } = queue.shift();
+
+            if (distance >= movementRange) continue;
+
+            const room = this.getRoom(pos.x, pos.y);
+            if (!room || !room.explored) continue;
+
+            const directions = [
+                { dx: 0, dy: -1, door: 'north' },
+                { dx: 0, dy: 1, door: 'south' },
+                { dx: 1, dy: 0, door: 'east' },
+                { dx: -1, dy: 0, door: 'west' }
+            ];
+
+            for (let dir of directions) {
+                if (!room.doors[dir.door]) continue;
+
+                const nextX = pos.x + dir.dx;
+                const nextY = pos.y + dir.dy;
+                const key = this.getRoomKey(nextX, nextY);
+
+                if (nextX < 0 || nextX >= this.gridSize || nextY < 0 || nextY >= this.gridSize) continue;
+
+                const nextRoom = this.getRoom(nextX, nextY);
+                if (!nextRoom || !nextRoom.explored) continue;
+
+                if (!reachable.has(key) || reachable.get(key) > distance + 1) {
+                    reachable.set(key, distance + 1);
+                    queue.push({ pos: { x: nextX, y: nextY }, distance: distance + 1 });
+                }
+            }
+        }
+
+        return reachable;
+    }
+
+    isRoomReachable(x, y) {
+        const reachable = this.getReachableRooms();
+        return reachable.has(this.getRoomKey(x, y));
+    }
+
     render() {
         // Update stats
         document.getElementById('health-bar').style.width =
@@ -522,6 +589,10 @@ class Game {
         // Update turn counter
         document.getElementById('turn-counter').textContent = `Turn: ${this.turn}`;
 
+        // Update movement info
+        const movementInfo = document.getElementById('movement-info');
+        movementInfo.textContent = `Movement Range: ${this.player.health} rooms`;
+
         // Render game board
         this.renderBoard();
 
@@ -534,6 +605,7 @@ class Game {
         board.innerHTML = '';
 
         const adjacent = this.getAdjacentRooms();
+        const reachable = this.getReachableRooms();
 
         for (let y = 0; y < this.gridSize; y++) {
             for (let x = 0; x < this.gridSize; x++) {
@@ -544,9 +616,17 @@ class Game {
                 const isPlayerHere = this.player.position.x === x && this.player.position.y === y;
                 const isHorsemanHere = this.horseman && this.horseman.position.x === x && this.horseman.position.y === y;
                 const isAdjacent = adjacent.some(pos => pos.x === x && pos.y === y);
+                const isReachable = reachable.has(this.getRoomKey(x, y));
 
                 if (room && room.explored) {
                     div.classList.add('explored');
+
+                    // Mark rooms that are out of range
+                    if (!isPlayerHere && !isReachable) {
+                        div.classList.add('out-of-range');
+                    } else if (!isPlayerHere && isReachable) {
+                        div.classList.add('in-range');
+                    }
 
                     if (room.type === 'exit') {
                         div.classList.add('exit');
@@ -570,10 +650,13 @@ class Game {
                     div.innerHTML = '<span class="room-icon">?</span>';
                 }
 
-                // Add click handler for movement
-                if (isAdjacent || (room && room.explored && !isPlayerHere)) {
+                // Add click handler for movement - only for adjacent unexplored or reachable explored rooms
+                if (isAdjacent || (room && room.explored && !isPlayerHere && isReachable)) {
                     div.style.cursor = 'pointer';
                     div.addEventListener('click', () => this.movePlayer(x, y));
+                } else if (room && room.explored && !isPlayerHere && !isReachable) {
+                    // Out of range rooms are not clickable
+                    div.style.cursor = 'not-allowed';
                 }
 
                 board.appendChild(div);
@@ -630,6 +713,12 @@ HOW TO PLAY:
 - Collect items to restore Health and Sanity
 - Avoid events or make saving throws (4+ on d6)
 
+MOVEMENT:
+- You can move up to Health rooms per turn
+- Lower health = shorter movement range!
+- Rooms out of range are dimmed and unclickable
+- Healing increases your movement range
+
 ROOMS CONTAIN:
 - Items: Restore health or sanity
 - Events: Dangerous encounters requiring saves
@@ -678,6 +767,7 @@ Good luck, Ichabod! The night is dark and full of terrors...`;
         this.horseman = null;
         this.gameOver = false;
         this.hasMovedThisTurn = false;
+        this.turnStartPosition = { x: 5, y: 5 };
 
         document.getElementById('log-entries').innerHTML = '';
         document.getElementById('horror-warning').style.color = '';

@@ -16,9 +16,25 @@ You are **Ichabod Crane**, a nervous schoolmaster who has entered a decrepit man
 
 ### Turn Structure
 
-- **Movement**: Click on any explored room to move freely
+- **Movement**: Click on explored rooms within range to move freely
+- **Movement Range**: You can move a number of rooms equal to your current Health
 - **Exploration**: Click on an unexplored room (marked "?") to enter
 - **Turn End**: Entering a new room ends your turn
+
+### Movement System
+
+The movement range is **limited by your current Health value**:
+
+- **Health 6**: Can move up to 6 rooms away from where your turn started
+- **Health 3**: Can only move 3 rooms away
+- **Health 1**: Can only move to adjacent rooms!
+
+**Important Notes**:
+- Movement is counted through connected doors (pathfinding distance)
+- Rooms out of range appear dimmed and grayed out
+- Rooms within range are highlighted when hovered
+- Taking damage reduces your mobility - healing is crucial!
+- You can always explore adjacent unexplored rooms regardless of health
 
 ### Character Stats
 
@@ -83,11 +99,13 @@ Before the Horseman appears, these locations won't let you leave.
 
 ## Strategy Tips
 
-1. **Explore quickly** early on to find useful items and the Secret Passage
-2. **Manage risk** - avoid exploring too many rooms if low on health/sanity
-3. **Plan your escape** - note where the Entrance is or find the Secret Passage before Horror 5
-4. **Path management** - The Horseman can only move through explored rooms, so be mindful of creating direct paths
-5. **Speed matters** - The Horseman accelerates each turn, so don't delay your escape!
+1. **Protect your Health** - It determines movement range! Low health = trapped and vulnerable
+2. **Explore quickly** early on to find useful items and the Secret Passage
+3. **Heal strategically** - Restoring health increases both survivability AND mobility
+4. **Plan your escape** - note where the Entrance is or find the Secret Passage before Horror 5
+5. **Path management** - The Horseman can only move through explored rooms, so be mindful of creating direct paths
+6. **Speed matters** - The Horseman accelerates each turn, so don't delay your escape!
+7. **Stay healthy before summoning** - Having full health (6 movement) when the Horseman appears gives you the best escape chances
 
 ## Room Types
 
