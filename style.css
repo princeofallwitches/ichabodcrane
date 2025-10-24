@@ -1,0 +1,400 @@
+/* Gothic Horror Styling - Early 1800s America Theme */
+
+:root {
+    --bg-dark: #1a1410;
+    --bg-medium: #2d2416;
+    --bg-light: #3d3020;
+    --text-primary: #e8dcc0;
+    --text-secondary: #c4b89a;
+    --accent-blood: #8b0000;
+    --accent-gold: #d4af37;
+    --health-color: #dc3545;
+    --sanity-color: #6f42c1;
+    --border-color: #5a4a30;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Garamond', serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+    background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--accent-gold);
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--accent-gold);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+}
+
+/* Info Panel */
+.info-panel {
+    background-color: var(--bg-medium);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    height: fit-content;
+}
+
+.character-card, .horror-meter, .inventory {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h2, h3 {
+    color: var(--accent-gold);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.stat {
+    margin-bottom: 15px;
+}
+
+.stat-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+.stat-bar {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background-color: var(--bg-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.health-fill {
+    background: linear-gradient(90deg, var(--health-color), #ff4444);
+}
+
+.sanity-fill {
+    background: linear-gradient(90deg, var(--sanity-color), #9966ff);
+}
+
+.stat-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: var(--text-primary);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.horror-display {
+    font-size: 2rem;
+    text-align: center;
+    color: var(--accent-blood);
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.horror-warning {
+    text-align: center;
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.inventory ul {
+    list-style: none;
+}
+
+.inventory li {
+    padding: 8px;
+    margin: 5px 0;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.empty-inventory {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #f0c040;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.btn-secondary {
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-medium);
+    border-color: var(--accent-gold);
+}
+
+/* Game Board */
+.game-board-container {
+    background-color: var(--bg-medium);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(10, 80px);
+    grid-template-rows: repeat(10, 80px);
+    gap: 2px;
+    background-color: var(--bg-dark);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.room {
+    position: relative;
+    background-color: var(--bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 4px;
+}
+
+.room.explored {
+    background-color: var(--bg-medium);
+    border-color: var(--accent-gold);
+}
+
+.room.current {
+    background-color: #2a4a2a;
+    border: 3px solid #4ade80;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+}
+
+.room.unexplored {
+    background-color: var(--bg-dark);
+    border-style: dashed;
+    opacity: 0.6;
+}
+
+.room.exit {
+    background-color: #1a3a4a;
+    border-color: #60a5fa;
+}
+
+.room.horseman {
+    background-color: var(--accent-blood);
+    border-color: #ff0000;
+    animation: pulse 1s infinite;
+}
+
+.room:hover:not(.unexplored) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(139, 0, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+    }
+}
+
+.room-icon {
+    font-size: 2rem;
+}
+
+.room-doors {
+    position: absolute;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.turn-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.turn-info p {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-medium);
+    border: 3px solid var(--accent-gold);
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+#event-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#event-actions .btn {
+    margin: 0;
+}
+
+/* Game Log */
+.game-log {
+    margin-top: 20px;
+    background-color: var(--bg-medium);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.game-log h3 {
+    margin-bottom: 15px;
+}
+
+.log-entry {
+    padding: 8px;
+    margin: 5px 0;
+    border-left: 3px solid var(--border-color);
+    padding-left: 12px;
+    font-size: 0.9rem;
+}
+
+.log-entry.event {
+    border-left-color: var(--accent-blood);
+}
+
+.log-entry.item {
+    border-left-color: var(--accent-gold);
+}
+
+.log-entry.portent {
+    border-left-color: var(--sanity-color);
+}
+
+.log-entry.horseman {
+    border-left-color: #ff0000;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .game-board {
+        grid-template-columns: repeat(10, 60px);
+        grid-template-rows: repeat(10, 60px);
+    }
+}

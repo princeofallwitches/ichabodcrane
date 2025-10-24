@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ichabod Crane's House of Pain</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ichabod Crane's House of Pain</h1>
+            <p class="subtitle">A Gothic Horror Adventure ~ Early 1800s America</p>
+        </header>
+
+        <div class="game-layout">
+            <!-- Left Panel: Character & Game Info -->
+            <aside class="info-panel">
+                <div class="character-card">
+                    <h2>Ichabod Crane</h2>
+                    <div class="stat">
+                        <span class="stat-label">Health:</span>
+                        <div class="stat-bar">
+                            <div id="health-bar" class="stat-fill health-fill"></div>
+                            <span id="health-text" class="stat-value">6/6</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Sanity:</span>
+                        <div class="stat-bar">
+                            <div id="sanity-bar" class="stat-fill sanity-fill"></div>
+                            <span id="sanity-text" class="stat-value">6/6</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="horror-meter">
+                    <h3>Horror Level</h3>
+                    <div class="horror-display">
+                        <span id="horror-level">0</span> / 5
+                    </div>
+                    <p class="horror-warning" id="horror-warning">The darkness gathers...</p>
+                </div>
+
+                <div class="inventory">
+                    <h3>Inventory</h3>
+                    <ul id="inventory-list">
+                        <li class="empty-inventory">No items</li>
+                    </ul>
+                </div>
+
+                <div class="controls">
+                    <button id="new-game-btn" class="btn btn-primary">New Game</button>
+                    <button id="instructions-btn" class="btn btn-secondary">Instructions</button>
+                </div>
+            </aside>
+
+            <!-- Main Game Board -->
+            <main class="game-board-container">
+                <div id="game-board" class="game-board"></div>
+
+                <div class="turn-info">
+                    <p id="turn-counter">Turn: 1</p>
+                    <p id="movement-info">Click adjacent rooms to move</p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Event Modal -->
+        <div id="event-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="event-title">Event</h2>
+                <p id="event-description"></p>
+                <div id="event-actions">
+                    <button id="event-continue-btn" class="btn btn-primary">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Log -->
+        <div class="game-log">
+            <h3>Game Log</h3>
+            <div id="log-entries"></div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
